@@ -41,7 +41,7 @@ document.addEventListener("DOMContentLoaded", () => {
             for (const [key, action] of Object.entries(pieceActions)) {
                 if (pieceId.includes(key)) {
                     console.log(`Ativando ação para a peça: ${key}`);
-                    action(square.id);
+                    action(square.id, turn);
                     break; 
                 }
             }
@@ -53,26 +53,69 @@ document.addEventListener("DOMContentLoaded", () => {
 
 });
 
-function calculaPosicoesPawn(id){
-  console.log(id);
-  if(id[1] === '2'){
-      const col = id[0]; 
-      console.log(col);
-      const move1 = document.getElementById(`${col}3`); 
-      const move2 = document.getElementById(`${col}4`); 
-      console.log('move1', move1);
+function calculaPosicoesPawn(id, turn) {
 
-      if (move1) {
-          move1.style.backgroundColor = "green";
+  const col = id[0]; 
+  const line = parseInt(id[1], 10); 
 
+  const nextCol = String.fromCharCode(col.charCodeAt(0) + 1); 
+  const prevCol = String.fromCharCode(col.charCodeAt(0) - 1); 
+
+  let move1, move2, move3, move4;
+
+  if (turn === 'white') {
+    move1 = document.getElementById(`${col}${line + 1}`); 
+    if (line === 2) {
+      move2 = document.getElementById(`${col}${line + 2}`);  
+    }
+
+    move3 = document.getElementById(`${nextCol}${line + 1}`); 
+    move4 = document.getElementById(`${prevCol}${line + 1}`); 
+
+    if (move3) {
+      const img = move3.querySelector("img"); 
+      if (img && img.id.toLowerCase().includes('black')) {
+        move3.style.backgroundColor = "green";
       }
-      if (move2) {
-          move2.style.backgroundColor = "green";
+    }
 
+    if (move4) {
+      const img = move4.querySelector("img"); 
+      if (img && img.id.toLowerCase().includes('black')) {
+        move4.style.backgroundColor = "green";
       }
+    }
+  } else if (turn === 'black') {
+    move1 = document.getElementById(`${col}${line - 1}`); 
+    if (line === 7) {
+      move2 = document.getElementById(`${col}${line - 2}`);  
+    }
 
+    move3 = document.getElementById(`${nextCol}${line - 1}`); 
+    move4 = document.getElementById(`${prevCol}${line - 1}`); 
+
+    if (move3) {
+      const img = move3.querySelector("img"); 
+      if (img && img.id.toLowerCase().includes('white')) {
+        move3.style.backgroundColor = "green";
+      }
+    }
+
+    if (move4) {
+      const img = move4.querySelector("img"); 
+      if (img && img.id.toLowerCase().includes('white')) {
+        move4.style.backgroundColor = "green";
+      }
+    }
+  }
+
+  if (move1) move1.style.backgroundColor = "green";
+
+  if (move2) move2.style.backgroundColor = "green";
+  
 }
-}
+
+
 
 function calculaPosicoesKnight(){
   console.log('09');
